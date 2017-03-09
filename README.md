@@ -1,1 +1,1 @@
-# react-redux demo
+# 自己写的AMD打包器，可以将commonJS转换为AMD模块并分析依赖合并打包
