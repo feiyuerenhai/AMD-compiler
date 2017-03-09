@@ -5,7 +5,10 @@ define("src/actions/index.js", ["exports"], function (exports) {
 		value: true
 	});
 	var action = function action(text) {
-		type: 'ADD', text;
+		return {
+			type: 'ADD',
+			text: text
+		};
 	};
 
 	exports.default = action;

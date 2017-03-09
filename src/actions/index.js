@@ -1,6 +1,8 @@
 const action=(text)=>{
-	type: 'ADD',
-	text
+	return {
+		type: 'ADD',
+		text
+	}
 };
 
 export default action;
