@@ -1,10 +1,27 @@
+// smart components who receive wrapped state\disptach\ownProps are only to provide props to UI components
+
 import React from 'react';
-import Component from '../components/index.js';
+import {connect} from 'react-redux';
+import Greeting from '../components/index.js';
+import {change, remove} from '../actions/index.js';
 
-const App = React.createClass({
-	render: function(){
-		return <div>Hello World!</div>
+const mapStateToProps = function(state, ownProps){
+	return {
+		name: state.name
 	}
-});
+};
 
-export default App;
+const mapDispatchToProps = function(dispatch, ownProps){
+	return{
+		change(value){
+			dispatch( change( value ) );
+		},
+		remove(){
+			dispatch( remove() );
+		}
+	}
+};
+
+const ConnectedGreeting = connect(mapStateToProps, mapDispatchToProps)(Greeting);
+
+export default ConnectedGreeting;

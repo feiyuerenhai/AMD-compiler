@@ -1,8 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {connect, Provider} from 'react-redux';
+import {Provider} from 'react-redux';
 import {createStore} from 'redux';
+import ConnectedGreeting from './containers/index.js';
+import reducer from './reducers/index.js';
 
-import App from './containers/index.js';
+let store = createStore(reducer);
 
-ReactDOM.render(<App/>, document.getElementById('app'));
+ReactDOM.render(
+	<Provider store={store}>
+		<ConnectedGreeting/>
+  	</Provider>, document.getElementById('app'));
