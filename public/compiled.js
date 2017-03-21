@@ -188,6 +188,8 @@ define("src/containers/index.js", ["exports", "react", "react-redux", "src/compo
 
 	// smart components who receive wrapped state\disptach\ownProps are only to provide props to UI components
 
+	//connected components have access to state
+
 	var mapStateToProps = function mapStateToProps(state, ownProps) {
 		return {
 			name: state.name
