@@ -35,6 +35,7 @@ let parseMod = function(path, callback){
 		callback(mod);
 	};
 	read(path, function(data){
+		console.log('*******'+path);
 		let code = babel.transform(data, {'presets':['es2015','stage-2','react'], "plugins": ["transform-es2015-modules-amd"] }).code;
 		eval(code);
 	});
