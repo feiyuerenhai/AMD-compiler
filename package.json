@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "bin": {
+    "es6compile": "./compiler.js"
+  },
   "scripts": {
     "build": "node ./compiler.js"
   },

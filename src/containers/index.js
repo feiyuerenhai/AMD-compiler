@@ -1,5 +1,7 @@
 // smart components who receive wrapped state\disptach\ownProps are only to provide props to UI components
 
+//connected components have access to state
+
 import React from 'react';
 import {connect} from 'react-redux';
 import Greeting from '../components/index.js';

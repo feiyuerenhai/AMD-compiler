@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 let babel = require('babel-core');
 let fs = require('fs');
 let path = require('path');
@@ -36,7 +38,7 @@ let parseMod = function(path, callback){
 	});
 };
 
-let digestlDepQueue = function(){
+let digestDepQueue = function(){
 	let modPath = depQueue.shift();
 	if(modPath && !resolvedDeps[modPath]){
 		//分析一条依赖
@@ -56,11 +58,11 @@ let digestlDepQueue = function(){
 					resolvedDeps[modPath];
 				};
 			};
-			digestlDepQueue();
+			digestDepQueue();
 		});
 	}else{
 		//分析结束
-		console.log('-- complete --');
+		console.log('-- complete --> '+outpath);
 		write(outpath, (function(){
 			let mod, output = [];
 			for(let i = modTree.length-1; i>=0; i--){
@@ -73,4 +75,4 @@ let digestlDepQueue = function(){
 	};
 };
 
-digestlDepQueue();
+digestDepQueue();
