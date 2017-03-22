@@ -67,7 +67,7 @@ let parsedModules = {};
 let parseModuleFromPath = function(path, callback){
 	//已经解析过的模块直接从缓存取
 	if(parsedModules[path]){
-		console.log(chalk.gray('⎔ skip → '+path));
+		// console.log(chalk.gray('⎔ skip → '+path));
 		callback(parsedModules[path]);
 		return;
 	};
@@ -144,7 +144,7 @@ let digestDepQueue = function(){
 				if(!written[mod.id]){
 					//记录反转、合并之后的依赖树
 					depSnake.push(mod.id);
-					//
+					//输出
 					output.push('define("'+mod.id+'", ["'+mod.dep.join('", "')+'"], '+mod.fac.toString()+')');
 					written[mod.id] = true;
 				};
