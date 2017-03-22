@@ -1,3 +1,17 @@
+define("src/actions/deep/index.js", ["exports"], function (exports) {
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	var deep = exports.deep = function deep() {
+		return {
+			type: 'UNDEFINED',
+			data: ''
+		};
+	};
+});
+
 define("react", [""], function (){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
 /**
  * Copyright 2013-present, Facebook, Inc.
@@ -4689,14 +4703,13 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ ])
 });
 
-define("src/actions/index.js", ["exports"], function (exports) {
+define("src/actions/index.js", ["exports", "src/actions/deep/index.js"], function (exports, deep) {
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
-	// action creators are pure functions that return actions only
-	// each action will go through reducers to pump up another different state
+
 
 	var change = function change(text) {
 		return {
@@ -4714,6 +4727,7 @@ define("src/actions/index.js", ["exports"], function (exports) {
 
 	exports.change = change;
 	exports.remove = remove;
+	exports.deep = deep;
 });
 
 define("src/components/index.js", ["exports", "react"], function (exports, _react) {
@@ -6425,7 +6439,7 @@ define("src/reducers/index.js", ["exports"], function (exports) {
 	exports.default = reducer;
 });
 
-define("src/containers/index.js", ["exports", "react", "react-redux", "../components/index.js", "../actions/index.js"], function (exports, _react, _reactRedux, _index, _index3) {
+define("src/containers/index.js", ["exports", "react", "react-redux", "src/components/index.js", "src/actions/index.js"], function (exports, _react, _reactRedux, _index, _index3) {
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
@@ -24704,7 +24718,7 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 });
 });
 
-define("src/index.jsx", ["react", "react-dom", "react-redux", "redux", "./containers/index.js", "./reducers/index.js"], function (_react, _reactDom, _reactRedux, _redux, _index, _index3) {
+define("src/index.jsx", ["react", "react-dom", "react-redux", "redux", "src/containers/index.js", "src/reducers/index.js"], function (_react, _reactDom, _reactRedux, _redux, _index, _index3) {
 	'use strict';
 
 	var _react2 = _interopRequireDefault(_react);
@@ -24730,4 +24744,4 @@ define("src/index.jsx", ["react", "react-dom", "react-redux", "redux", "./contai
 	), document.getElementById('app'));
 });
 
-require(["src/index.jsx"])
+require(["src/index.jsx"]);

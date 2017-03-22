@@ -32,6 +32,13 @@ function exist(queue, callback){
 	};
 	_exists();
 };
+//相对于基准路径的相对路径的绝对路径
+function absolutePath(base, relative){
+	let resolvedPath = path.resolve( path.dirname(base), relative);
+	//去除./，会被require认为需要按路径加载
+	let relativePath = path.relative(__rootdir, resolvedPath);
+	return relativePath;
+};
 
 let readPublicModuleCodeAsAMD = function(mod_name, callback){
 	let queue = [];
@@ -40,6 +47,7 @@ let readPublicModuleCodeAsAMD = function(mod_name, callback){
 	queue.push(path.relative('./', __rootdir+'/node_modules/'+mod_name+'/'+mod_name+'.js'));
 	exist(queue, function(path){
 		read(path, function(code_str){
+			console.log(chalk.gray('⎔ veer → '+path));
 			//公共依赖模块不转码直接使用
 			let code = code_str;
 			callback(code);
@@ -59,7 +67,7 @@ let parsedModules = {};
 let parseModuleFromPath = function(path, callback){
 	//已经解析过的模块直接从缓存取
 	if(parsedModules[path]){
-		// console.log(chalk.gray('⎔ resolved → '+path));
+		console.log(chalk.gray('⎔ skip → '+path));
 		callback(parsedModules[path]);
 		return;
 	};
@@ -69,6 +77,14 @@ let parseModuleFromPath = function(path, callback){
 	let module = undefined,
 	exports = undefined,
 	define = function(dep, fac){
+		//转换相对某个模块路径的path为绝对路径
+		dep = dep.map(function(i){
+			if(i.indexOf('.')>=0 || i.indexOf('/')>=0){
+				return absolutePath(path, i);
+			}else{
+				return i;
+			};
+		});
 		let mod = {
 			id: path,
 			dep: dep,
@@ -108,20 +124,11 @@ let digestDepQueue = function(){
 			//遍历当前模块依赖，获取依赖路径
 			for(let i=0; i<mod.dep.length; i++){
 				let one_dep = mod.dep[i];
-				if(one_dep.indexOf('.')==0){
-					//本地模块路径，将其相对根目录的路径推到队尾
-					let resolvedPath = path.resolve( path.dirname(modPath), one_dep);
-					//不能加./，会被require认为需要按路径加载
-					let relativePath = path.relative(__rootdir, resolvedPath);
-					one_dep = relativePath;
-					depQueue.push(relativePath);
+				if( !(/define|require|module|exports/.test(one_dep)) ){
+					depQueue.push(one_dep);
 					console.log(chalk.gray('⎔ depend → '+one_dep));
 				}else{
-					//公共模块路径，除了核心模块外全部直接推到队列尾
-					if( !(/define|require|module|exports/.test(one_dep)) ){
-						depQueue.push(one_dep);
-						console.log(chalk.gray('⎔ depend → '+one_dep));
-					};
+					// console.log(chalk.gray('⎔ ignore → '+one_dep));
 				}
 			};
 			digestDepQueue();
@@ -143,13 +150,13 @@ let digestDepQueue = function(){
 				};
 			});
 			//追加require启动入口
-			output.push('require(["'+entry+'"])');
+			output.push('require(["'+entry+'"]);\n');
 			//内容输出
 			return output.join(';\n\n');
 		})());
 		let time_complete = new Date();
 		console.log(chalk.blue('⎔ tree → '+chalk.italic(depSnake.join(' ▸ '))));
-		console.log(chalk.bold.green('✔ complete → '+outpath+' (in '+(time_complete - time_start)+'ms)'));
+		console.log(chalk.bold.green('✔ complete → '+outpath+' (with '+depSnake.length+' modules in '+(time_complete - time_start)+'ms)'));
 	};
 };
 
