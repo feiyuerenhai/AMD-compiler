@@ -6418,7 +6418,7 @@ define("src/reducers/index.js", ["exports"], function (exports) {
 	// reducers are pure functions that return an object to serve as state
 
 	var reducer = function reducer() {
-		var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { name: 'Jackie' };
+		var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { name: '海涛' };
 		var action = arguments[1];
 
 		switch (action.type) {
